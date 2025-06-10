@@ -1,5 +1,7 @@
 import { Search } from '@/components/search';
 import { useRouter } from 'next/router';
+import { PostCard } from './components/posrt-card';
+import { PostGridCard } from './components/post-grid-card';
 
 export function BlogList() {
   const router = useRouter();
@@ -11,7 +13,7 @@ export function BlogList() {
 
   return (
     <div className="flex flex-col py-24 flex-grow h-full">
-      <header className="">
+      <header className="pb-14">
         <div className="container space-y-6 flex flex-col items-start justify-between md:flex-row md:items-end lg:items-end">
           <div className="flex flex-col gap-4 md:px-0">
             <span className="text-body-tag text-cyan-100 w-fit rounded-md text-center md:text-left py-2 px-4 bg-cyan-300">
@@ -25,6 +27,42 @@ export function BlogList() {
           <Search />
         </div>
       </header>
+
+      <PostGridCard>
+        <PostCard
+          title="Transformando seu negócio em uma loja virtal"
+          description="lorem lorem lore lorem lorem lore lorem lorem lore lorem lorem lore lorem lorem lore"
+          date="10/12/2024"
+          image="/assets/primeiro-post.png"
+          slug="/transformando"
+          author={{
+            avatar: '/customer-01.png',
+            name: 'Aspen Dokitng',
+          }}
+        />
+        <PostCard
+          title="Transformando seu negócio em uma loja virtal"
+          description="lorem lorem lore lorem lorem lore lorem lorem lore lorem lorem lore lorem lorem lore"
+          date="10/12/2024"
+          image="/assets/primeiro-post.png"
+          slug="/transformando"
+          author={{
+            avatar: '/customer-01.png',
+            name: 'Aspen Dokitng',
+          }}
+        />
+        <PostCard
+          title="Transformando seu negócio em uma loja virtal"
+          description="lorem lorem lore lorem lorem lore lorem lorem lore lorem lorem lore lorem lorem lore"
+          date="10/12/2024"
+          image="/assets/primeiro-post.png"
+          slug="/transformando"
+          author={{
+            avatar: '/customer-01.png',
+            name: 'Aspen Dokitng',
+          }}
+        />
+      </PostGridCard>
     </div>
   );
 }
