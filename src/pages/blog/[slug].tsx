@@ -1,53 +1,45 @@
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
+  PostPage as Post,
+  type PostPageProps,
+} from '@/templates/blog/post-page';
 import { allPosts } from 'contentlayer/generated';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { GetStaticProps, GetStaticPaths } from 'next';
 
-export default function PostPage() {
-  const router = useRouter();
-  const slug = router.query.slug as string;
-
-  const post = allPosts.find((post) =>
-    post.slug.toLowerCase().includes(slug.toLowerCase()),
-  );
-
-  return (
-    <main className="mt-32 text-gray-100">
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink asChild className="text-action-sm">
-              <Link href="/blog">Blog</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-
-          <BreadcrumbSeparator />
-
-          <BreadcrumbItem>
-            <span className="text-blue-200 text-action-sm">{post?.title}</span>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6 lg:gap-12">
-        <article className="bg-gray-600 rounded-lg overflow-hidden border-gray-400 border-[1px]">
-          <figure className="relative aspect-[16/10] w-full overflow-hidden rounded-lg">
-            <Image
-              src={post?.image ?? ''}
-              alt={post?.title ?? ''}
-              fill
-              className="object-cover"
-            />
-          </figure>
-        </article>
-      </div>
-    </main>
-  );
+export default function PostPage({ post }: PostPageProps) {
+  return <Post post={post} />;
 }
+
+export const getStaticPaths = (async () => {
+  const sortedPosts = allPosts.sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+  );
+
+  const recentPosts = sortedPosts.slice(0, 5);
+
+  const paths = recentPosts.map((post) => ({
+    params: { slug: post.slug },
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking',
+  };
+}) satisfies GetStaticPaths;
+
+export const getStaticProps = (async (context) => {
+  const { slug } = context.params as { slug: string };
+
+  const post = allPosts.find((post) => post.slug === slug);
+
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      post,
+    },
+  };
+}) satisfies GetStaticProps;

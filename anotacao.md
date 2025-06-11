@@ -17,3 +17,10 @@ instalar o breadcrumb component do shadcn
 npx shadcn@latest add breadcrumb
 
 ````
+
+
+instalar a lib de react markdown 
+
+````
+npm install react-markdown
+````
